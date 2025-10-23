@@ -1,0 +1,42 @@
+<mat-sidenav-container class="employee-container" (backdropClick)="close('backdrop')">
+  <mat-sidenav class="sidenav-container" #sidenav (keydown.escape)="close('escape')" disableClose>
+    <p>
+      <button matMiniFab (click)="close('toggle button')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </p>
+
+    <mat-selection-list #navLink [multiple]="false">
+      @for (navLink of navLinks; track $index ) {
+      <mat-list-option [value]="navLink.link" (click)="handleRouting(navLink.link)">
+        <mat-icon matListItemIcon>{{ navLink.icon }}</mat-icon>
+        <div matListItemTitle>{{ navLink.name }}</div>
+      </mat-list-option>
+      <mat-divider></mat-divider>
+      }
+    </mat-selection-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="employee-toolbar">
+      <button matIconButton>
+        <mat-icon class="menu-icon" (click)="sidenav.open()">menu</mat-icon>
+      </button>
+      <h1 class="employee-app-name">Employee Dashboard Menu</h1>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- <mat-drawer-container class="employee-container">
+  <mat-drawer mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/employee-list">Employee List</a>
+      <a mat-list-item routerLink="/add-employee">Add Employee</a>
+    </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content>Main content</mat-drawer-content>
+</mat-drawer-container> -->

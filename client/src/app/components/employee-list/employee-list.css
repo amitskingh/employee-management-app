@@ -1,0 +1,50 @@
+.example-card {
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table {
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td,
+th {
+  width: 25%;
+}
+
+.action-btn-row {
+  min-width: 175px;
+}
+
+.age-highlight {
+  background-color: oklch(68.1% 0.162 75.834);
+}
+
+.angular,
+.react,
+.node,
+.age-highlight {
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.angular {
+  background-color: oklch(64.6% 0.222 41.116);
+}
+
+.react {
+  background-color: oklch(62.7% 0.194 149.214);
+}
+
+.node {
+  background-color: oklch(54.6% 0.245 262.881);
+}

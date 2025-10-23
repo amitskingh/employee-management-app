@@ -1,0 +1,33 @@
+<mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>person</mat-icon>
+    <mat-card-title>Employee</mat-card-title>
+    <mat-card-subtitle>{{ employee.name }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list role="list">
+      <mat-list-item role="listitem">Name: {{ employee.name }}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item role="listitem">Age: {{ employee.age }}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item role="listitem">Departement: {{ employee.department | titlecase}}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item role="listitem">Email: {{ employee.email }}</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item role="listitem">Skills: </mat-list-item>
+
+      <div class="chip-container">
+        <mat-chip-set>
+          @for (skill of employee.skills; track $index) {
+          <mat-chip>{{ skill }}</mat-chip>
+          }@empty {
+          <mat-chip>No Skills</mat-chip>
+          }
+        </mat-chip-set>
+      </div>
+    </mat-list>
+  </mat-card-content>
+  <mat-card-actions>
+    <a matButton routerLink="/employee-list">Back to employee list</a>
+  </mat-card-actions>
+</mat-card>
