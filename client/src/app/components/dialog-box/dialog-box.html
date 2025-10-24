@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+
+<mat-dialog-content>
+  {{ data.content }}
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <!-- Use mat-button (lowercase) -->
+  <button mat-button (click)="onClose()">Close</button>
+
+  <!-- Pass value to parent when OK is clicked -->
+  <button mat-raised-button color="primary" (click)="onConfirm()" cdkFocusInitial>OK</button>
+</mat-dialog-actions>

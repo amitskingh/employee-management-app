@@ -1,0 +1,20 @@
+.employee-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.employee-toolbar {
+  background-color: #d7e3ff;
+  color: #005cbb;
+}
+
+.menu-icon {
+  color: #005cbb;
+}
+
+.content {
+  margin-top: 24px;
+}

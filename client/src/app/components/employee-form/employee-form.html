@@ -1,0 +1,165 @@
+<mat-card class="employee-card" appearance="outlined">
+  <mat-card-header>
+    <div class="card-headings">
+      <mat-card-title>Employee Form</mat-card-title>
+      <mat-card-subtitle>Please fill correct details!</mat-card-subtitle>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="employee-form">
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Name</mat-label>
+          <input type="text" matInput formControlName="name" placeholder="Enter employee name" />
+
+          @if((employeeForm.get('name')?.dirty || employeeForm.get('name')?.touched)){
+          @if(employeeForm.get('name')?.hasError('required')){
+          <div>
+            <mat-error>Name is required</mat-error>
+          </div>
+          } @else if(employeeForm.get('name')?.hasError('minlength')){
+          <mat-error>Minimum 3 characters required</mat-error>
+          } }
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Enter email" />
+
+          @if((employeeForm.get('email')?.dirty || employeeForm.get('email')?.touched)){
+          @if(employeeForm.get('email')?.hasError('required')){
+          <mat-error>Email is required</mat-error>
+          } @else if(employeeForm.get('email')?.hasError('email')){
+          <mat-error>Invalid email format</mat-error>
+          } }
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Salary</mat-label>
+          <input matInput type="number" formControlName="salary" placeholder="Enter salary" />
+          @if((employeeForm.get('salary')?.dirty || employeeForm.get('salary')?.touched)){
+          @if(employeeForm.get('salary')?.hasError('required')){
+          <mat-error>Salary is required</mat-error>
+          } @else if(employeeForm.get('salary')?.hasError('invalid')){
+          <mat-error>Invalid salary format</mat-error>
+          } @else if(employeeForm.get('salary')?.hasError('min')){
+          <mat-error>Minimum salary is 1</mat-error>
+          } @else if(employeeForm.get('salary')?.hasError('max')){
+          <mat-error>Maximum salary is 1000000</mat-error>
+          }}
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Phone No.</mat-label>
+          <span matTextPrefix>+91 &nbsp;</span>
+          <input matInput type="tel" formControlName="phone" placeholder="Enter phone" />
+          @if((employeeForm.get('phone')?.dirty || employeeForm.get('phone')?.touched)){
+          @if(employeeForm.get('phone')?.hasError('required')){
+          <mat-error>Phone is required</mat-error>
+          } @else if(employeeForm.get('phone')?.hasError('invalid')){
+          <mat-error>Invalid phone format</mat-error>
+          } @else if(employeeForm.get('phone')?.hasError('min')){
+          <mat-error>Phone number must be 10 digits</mat-error>
+          } @else if(employeeForm.get('salary')?.hasError('max')){
+          <mat-error>Phone number must be 10 digits</mat-error>
+          }}
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            @for (status of getStatus(); track $index) {
+
+            <mat-option [value]="status.value">{{ status.name | titlecase }}</mat-option>
+
+            }
+          </mat-select>
+
+          @if((employeeForm.get('status')?.dirty || employeeForm.get('status')?.touched)){
+          @if(employeeForm.get('status')?.hasError('required')){
+          <mat-error>Status is required</mat-error>
+          } }
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Department</mat-label>
+          <mat-select formControlName="department">
+            @for (department of getDepartments(); track $index) {
+
+            <mat-option [value]="department" [ariaSelected]="department">{{
+              department | uppercase
+            }}</mat-option>
+
+            }
+          </mat-select>
+
+          @if((employeeForm.get('department')?.dirty || employeeForm.get('department')?.touched)){
+          @if(employeeForm.get('department')?.hasError('required')){
+          <mat-error>Department is required</mat-error>
+          } }
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Designation</mat-label>
+          <mat-select formControlName="designation">
+            @for (designation of getDesignations(); track $index) {
+
+            <mat-option [value]="designation" [ariaSelected]="designation">{{
+              designation | titlecase
+            }}</mat-option>
+
+            }
+          </mat-select>
+
+          @if((employeeForm.get('desgination')?.dirty || employeeForm.get('desgination')?.touched)){
+          @if(employeeForm.get('desgination')?.hasError('required')){
+          <mat-error>Desgination is required</mat-error>
+          } }
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Address</mat-label>
+          <textarea matInput name="address" placeholder="Stret 132 Blake New York..."></textarea>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="employee-full-width">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date_of_joining" />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+
+          @if((employeeForm.get('date')?.dirty || employeeForm.get('date')?.touched)){
+          @if(employeeForm.get('date')?.hasError('required')){
+          <mat-error>Date is required</mat-error>
+          } }
+        </mat-form-field>
+      </div>
+
+      <div>
+        <button matButton="filled" type="submit" class="mt-4">Submit</button>
+        <button matButton="tonal" type="reset" class="mt-4">Reset</button>
+      </div>
+    </form>
+  </mat-card-content>
+  <!-- <mat-card-actions>
+    <button matButton>LIKE</button>
+    <button matButton>SHARE</button>
+  </mat-card-actions> -->
+</mat-card>
