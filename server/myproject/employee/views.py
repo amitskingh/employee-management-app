@@ -11,6 +11,7 @@ from .serializers import ListSerializer, UserRegisterSerializer, UserLoginSerial
 class ListAndCreateAPI(APIView):
 
     def get(self, request):
+        print(request.headers)
         print(request.user)
         results = Employee.objects.all()
 
