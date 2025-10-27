@@ -33,6 +33,10 @@ export class AuthService {
     this.storageService.removeItem('token');
   }
 
+  getToken() {
+    return this.storageService.getItem('token');
+  }
+
   loginUser(data: UserData) {
     return this.http.post<UserModel>(`${this.baseUrl}`, data);
   }
