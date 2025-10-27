@@ -8,7 +8,8 @@ import { StorageService } from './storage-service';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://127.0.0.1:8000/api/auth/login/';
+  private loginUrl = 'http://127.0.0.1:8000/api/auth/login/';
+  private registerUrl = 'http://127.0.0.1:8000/api/auth/register/';
   private storageService = inject(StorageService);
 
   isLoggedIn() {
@@ -38,6 +39,10 @@ export class AuthService {
   }
 
   loginUser(data: UserData) {
-    return this.http.post<UserModel>(`${this.baseUrl}`, data);
+    return this.http.post<UserModel>(`${this.loginUrl}`, data);
+  }
+
+  registerUser(data: UserData) {
+    return this.http.post<UserModel>(`${this.registerUrl}`, data);
   }
 }

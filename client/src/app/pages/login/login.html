@@ -41,43 +41,24 @@
           </mat-form-field>
         </div>
 
-        <!-- <div>
-          <mat-form-field class="login-full-width">
-            <mat-label>Role</mat-label>
-            <mat-select formControlName="status">
-              @for (role of getUserRoles(); track $index) {
-
-              <mat-option [value]="role.value">{{ role.name | titlecase }}</mat-option>
-
-              }
-            </mat-select>
-
-            @if((loginForm.get('role')?.dirty || loginForm.get('role')?.touched)){
-            @if(loginForm.get('role')?.hasError('required')){
-            <mat-error>Role is required</mat-error>
-            } }
-          </mat-form-field>
-        </div> -->
-
         <div>
-          <button matButton="filled" type="submit" class="mt-4">Submit</button>
+          <button matButton="filled" type="submit" class="mt-4">Login</button>
         </div>
       </form>
-
-      <div>
-        <mat-list role="list">
-          <mat-list-item role="listitem">Admin:</mat-list-item>
-          <mat-list-item role="listitem">Email: alice@gmail.com</mat-list-item>
-          <mat-list-item role="listitem">Password: 12345678</mat-list-item>
-          <mat-list-item role="listitem">Sub Admin:</mat-list-item>
-          <mat-list-item role="listitem">Email: bob@gmail.com</mat-list-item>
-          <mat-list-item role="listitem">Password: 12345678</mat-list-item>
-        </mat-list>
-      </div>
     </mat-card-content>
-    <!-- <mat-card-actions>
-    <button matButton>LIKE</button>
-    <button matButton>SHARE</button>
-  </mat-card-actions> -->
+    <mat-card-actions>
+      <a routerLink="/register" matButton>Not register? Register here</a>
+    </mat-card-actions>
+
+    <div>
+      <mat-list role="list">
+        <mat-list-item role="listitem">Admin:</mat-list-item>
+        <mat-list-item role="listitem">Email: alice@gmail.com</mat-list-item>
+        <mat-list-item role="listitem">Password: 12345678</mat-list-item>
+        <mat-list-item role="listitem">Sub Admin:</mat-list-item>
+        <mat-list-item role="listitem">Email: bob@gmail.com</mat-list-item>
+        <mat-list-item role="listitem">Password: 12345678</mat-list-item>
+      </mat-list>
+    </div>
   </mat-card>
 </div>

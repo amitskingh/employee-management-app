@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableOverviewExample } from './table-overview-example';
+import { Register } from './register';
 
-describe('TableOverviewExample', () => {
-  let component: TableOverviewExample;
-  let fixture: ComponentFixture<TableOverviewExample>;
+describe('Register', () => {
+  let component: Register;
+  let fixture: ComponentFixture<Register>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TableOverviewExample]
+      imports: [Register]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TableOverviewExample);
+    fixture = TestBed.createComponent(Register);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

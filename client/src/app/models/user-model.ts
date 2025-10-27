@@ -1,7 +1,11 @@
+export type roleAvailable = 'admin' | 'sub_admin';
+
+
 export interface UserData {
   email: string;
   password: string;
-  role?: string;
+  name?: string;
+  role?: roleAvailable;
 }
 
 export type roleType = {

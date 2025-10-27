@@ -16,12 +16,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { userDetail } from '../../guards/auth-guard';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
-import { UserData, UserModel } from '../../models/user-model';
+import { roleAvailable, UserData, UserModel } from '../../models/user-model';
 import { TitleCasePipe } from '@angular/common';
 import { MatHeaderRow } from '@angular/material/table';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   imports: [
     ReactiveFormsModule,
     MatButtonModule,
@@ -31,63 +31,50 @@ import { MatHeaderRow } from '@angular/material/table';
     MatFormFieldModule,
     MatSelectModule,
     MatListModule,
-    RouterLink,
+    TitleCasePipe,
+    RouterLink
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './register.html',
+  styleUrl: './register.css',
 })
-export class Login {
+export class Register {
   fb = inject(FormBuilder);
   route = inject(Router);
   authService = inject(AuthService);
 
-  loginForm = this.fb.group({
+  registerForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    // role: ['', [Validators.required]],
+    role: ['', [Validators.required]],
   });
 
-  // onSubmit() {
-  //   console.log(this.loginForm.value);
-
-  //   if (this.loginForm.invalid) {
-  //     this.loginForm.markAllAsTouched();
-  //     return;
-  //   }
-
-  //   if (this.loginForm.valid) {
-
-  //     if (
-  //       this.loginForm.controls.email.value === userDetail.email &&
-  //       this.loginForm.controls.password.value === userDetail.password
-  //     ) {
-  //       localStorage.setItem('token', `---->${this.loginForm.controls.email.value}<-----`);
-  //       this.route.navigate(['']);
-  //     }
-  //   }
-  // }
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
       return;
     }
 
+    console.log(this.registerForm.value);
+
+
     const newUser: UserData = {
-      email: this.loginForm.value.email as string,
-      password: this.loginForm.value.password as string,
+      name: this.registerForm.value.name as string,
+      email: this.registerForm.value.email as string,
+      password: this.registerForm.value.password as string,
+      role: this.registerForm.value.role as roleAvailable,
     };
 
-    this.authService.loginUser(newUser).subscribe({
+    this.authService.registerUser(newUser).subscribe({
       next: (data: UserModel) => {
-        this.authService.setUserData(data);
-        this.route.navigate(['']);
+        this.route.navigate(['login']);
       },
       error: (error: any) => {
-        console.error('error while logging user:', error);
+        console.error('error while registering user:', error);
       },
       complete: () => {
-        console.log('user is logged in.');
+        console.log('user is registered.');
       },
     });
   }
