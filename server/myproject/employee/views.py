@@ -1,18 +1,21 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Employee, User
+from .models import Employee
 from rest_framework.views import APIView
-from .serializers import ListSerializer, UserRegisterSerializer, UserLoginSerializer
-
+from .serializers import ListSerializer
+import json
 
 # Create your views here.
 
 
-class ListAndCreateAPI(APIView):
+def getToken(request):
+    print(request.headers["Authorization"][7:])
+    token = json.loads(request.headers["Authorization"][7:])
+
+
+class ListAndCreateSerializer(APIView):
 
     def get(self, request):
-        print(request.headers)
-        print(request.user)
         results = Employee.objects.all()
 
         serializer = ListSerializer(results, many=True)
@@ -20,6 +23,11 @@ class ListAndCreateAPI(APIView):
         return Response(serializer.data)
 
     def patch(self, request):
+
+        if getToken(request).get("role") != "admin":
+            return Response(
+                {"message": "Unauthorized Access"}, status=status.HTTP_401_UNAUTHORIZED
+            )
 
         serializer = ListSerializer(data=request.data)
 
@@ -32,7 +40,7 @@ class ListAndCreateAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SingleObjectAPI(APIView):
+class SingleObjectSerializer(APIView):
 
     def get(self, request, pk):
 
@@ -54,39 +62,58 @@ class SingleObjectAPI(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-
-class UserLoginAPI(APIView):
-    def post(self, request):
-        email = request.data.get("email")
-        password = request.data.get("password")
-
+    def get_object(self, pk):
         try:
-            user = User.objects.get(email=email, password=password)
+            result = Employee.objects.get(pk=pk)
+            return result
 
-            serializer = UserLoginSerializer(user)
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        except User.DoesNotExist:
+        except Employee.DoesNotExist:
             return Response(
-                {"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED
+                {"ERROR": "Data does not exists"}, status=status.HTTP_404_NOT_FOUND
             )
 
         except Exception as e:
             return Response(
-                {"error": f"An unexpected error occurred: {e}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                {"ERROR": f"An unexpected error occurs: {e}"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
+    def patch(self, request, pk):
 
-class UserRegisterAPI(APIView):
-    def post(self, request):
-        serializer = UserRegisterSerializer(data=request.data)
+        if getToken(request).get("role") != "admin":
+            return Response(
+                {"message": "Unauthorized Access"}, status=status.HTTP_401_UNAUTHORIZED
+            )
 
-        print(request.data)
+        result = self.get_object(pk)
+
+        # print(isinstance(result, Response))
+
+        # print(request.data)
+        # return Response({"ok": "ok"})
+
+        # Checking whether the result is the instance of the Response
+        if isinstance(result, Response):
+            return result
+
+        serializer = ListSerializer(result, data=request.data, partial=True)
 
         if serializer.is_valid():
+
             serializer.save()
+
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+
+        result = self.get_object(pk)
+
+        # Checking whether the result is the instance of the Response
+        if isinstance(result, Response):
+            return result
+
+        result.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
