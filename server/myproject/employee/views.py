@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Employee
+from .models import Employee, User
 from rest_framework.views import APIView
-from .serializers import ListSerializer
+from .serializers import ListSerializer, UserRegisterSerializer, UserLoginSerializer
 import json
 
 # Create your views here.
@@ -13,7 +13,7 @@ def getToken(request):
     token = json.loads(request.headers["Authorization"][7:])
 
 
-class ListAndCreateSerializer(APIView):
+class ListAndCreateAPI(APIView):
 
     def get(self, request):
         results = Employee.objects.all()
@@ -24,10 +24,10 @@ class ListAndCreateSerializer(APIView):
 
     def patch(self, request):
 
-        if getToken(request).get("role") != "admin":
-            return Response(
-                {"message": "Unauthorized Access"}, status=status.HTTP_401_UNAUTHORIZED
-            )
+        # if getToken(request).get("role") != "admin":
+        #     return Response(
+        #         {"message": "Unauthorized Access"}, status=status.HTTP_401_UNAUTHORIZED
+        #     )
 
         serializer = ListSerializer(data=request.data)
 
@@ -40,7 +40,7 @@ class ListAndCreateSerializer(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SingleObjectSerializer(APIView):
+class SingleObjectAPI(APIView):
 
     def get(self, request, pk):
 
@@ -80,10 +80,10 @@ class SingleObjectSerializer(APIView):
 
     def patch(self, request, pk):
 
-        if getToken(request).get("role") != "admin":
-            return Response(
-                {"message": "Unauthorized Access"}, status=status.HTTP_401_UNAUTHORIZED
-            )
+        # if getToken(request).get("role") != "admin":
+        #     return Response(
+        #         {"message": "Unauthorized Access"}, status=status.HTTP_401_UNAUTHORIZED
+        #     )
 
         result = self.get_object(pk)
 
@@ -117,3 +117,43 @@ class SingleObjectSerializer(APIView):
         result.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserRegisterAPI(APIView):
+
+    def post(self, request):
+
+        serializer = UserRegisterSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserLoginAPI(APIView):
+
+    def post(self, request):
+
+        try:
+            user = User.objects.get(email=request.data.get("email"))
+
+            if user.password == request.data.get("password"):
+                serializer = UserLoginSerializer(user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(
+                {"message": "User with this email does not exist."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        except Exception as e:
+            return Response(
+                {"message": f"An unexpected error occurred: {e}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        return Response(
+            {"message": "Invalid Credentials"}, status=status.HTTP_401_UNAUTHORIZED
+        )
